@@ -11,7 +11,7 @@
             <ul class="tags-list">
                 <li>Теги:</li>
                 {% for t in tags %}
-                    <li><a href="{{t.get_absolute_url}}">{{t.tag}}</a></li>
+                    <li><a href="{{ t.get_absolute_url }}">{{t.tag}}</a></li>
                 {% endfor %}
             </ul>
         {% endif %}

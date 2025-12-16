@@ -8,8 +8,9 @@ from django.template.loader import render_to_string
 from django.template.defaultfilters import slugify
 from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView, FormView, UpdateView, CreateView
+from django.core.cache import cache
 
-from .forms import AddPostForm, UploadFileForm
+from .forms import AddPostForm, UploadFileForm, ContactForm
 from .models import Women, Category, TagPost, UploadFiles
 from .utils import DataMixin, menu
 
@@ -21,7 +22,12 @@ class WomenHome(DataMixin, ListView):
     cat_selected = 0
 
     def get_queryset(self):
-        return Women.published.all().select_related('cat')
+        w_lst = cache.get('women_posts')
+        if not w_lst:
+            w_lst = Women.published.all().select_related('cat')
+            cache.set('women_posts', w_lst, 60)
+
+        return w_lst
 
 
 @login_required
@@ -70,9 +76,15 @@ class UpdatePage(PermissionRequiredMixin, DataMixin, UpdateView):
     permission_required = 'women.change_women'
 
 
-@permission_required(perm='women.add_women', raise_exception=True)
-def contact(request):
-    return HttpResponse("Обратная связь")
+class ContactFormView(LoginRequiredMixin, DataMixin, FormView):
+    form_class = ContactForm
+    template_name = 'women/contact.html'
+    success_url = reverse_lazy('home')
+    title_page = "Обратная связь"
+
+    def form_valid(self, form):
+        print(form.cleaned_data)
+        return super().form_valid(form)
 
 
 def login(request):

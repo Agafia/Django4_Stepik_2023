@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-ywt^i-jce1cq%5q4s^p0130-h9x9vdmvmge-vf8g+htkga+=71
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1', 'sitewomen.ru', 'localhost']
 INTERNAL_IPS = ["127.0.0.1"]
 
 
@@ -144,6 +144,7 @@ LOGIN_URL = 'users:login'
 
 AUTHENTICATION_BACKENDS = [
     'social_core.backends.github.GithubOAuth2',
+    'social_core.backends.vk.VKOAuth2',
     'django.contrib.auth.backends.ModelBackend',
     'users.authentication.EmailAuthBackend',
 ]
@@ -167,6 +168,11 @@ DEFAULT_USER_IMAGE = MEDIA_URL + 'users/default.png'
 
 SOCIAL_AUTH_GITHUB_KEY = 'Ov23liH2iXUaoeBQh96Z'
 SOCIAL_AUTH_GITHUB_SECRET = 'b371ec9dc529fab7b8711b7f74f62f897f872964'
+
+
+SOCIAL_AUTH_VK_OAUTH2_KEY = '54399867'
+SOCIAL_AUTH_VK_OAUTH2_SECRET = 'Hk6ICZaOvIcaHwh06jW4'
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
 
 SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_details',
